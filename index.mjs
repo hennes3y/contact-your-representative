@@ -12,14 +12,17 @@ app.use(cors());  // Enable CORS for all origins
 // Route to handle message generation
 app.post('/generate-message', async (req, res) => {
     console.log('Request Body:', req.body); // Log the incoming request body
-    const { name, topic, level } = req.body;
+
+    const { prompt } = req.body;
+
+    if (!prompt) {
+        console.error('No prompt found in request body');
+        return res.status(400).json({ error: 'Prompt is required' });
+    }
+
+    console.log('Received Prompt:', prompt); // Log the received prompt
 
     try {
-        // Construct the prompt
-        const prompt = `Write a letter to a government official at the ${level} level. The topic of advocacy is ${topic}. This letter is on behalf of ${name}, who is a constituent and deeply cares about this issue. The letter should be persuasive, respectful, and highlight the urgency of the issue.`;
-
-        console.log('Generated Prompt:', prompt); // Log the generated prompt
-
         // Hugging Face API call with your access token and chosen model
         const response = await fetch('https://api-inference.huggingface.co/models/openai-community/gpt2', {
             method: 'POST',
@@ -38,7 +41,16 @@ app.post('/generate-message', async (req, res) => {
             return res.status(500).json({ error: data.error });
         }
 
-        const generatedMessage = data.generated_text || "Unable to generate a message.";
+        // Handle different response formats
+        let generatedMessage = "Unable to generate a message.";
+        if (data.generated_text) {
+            generatedMessage = data.generated_text;
+        } else if (Array.isArray(data) && data.length > 0 && data[0].generated_text) {
+            generatedMessage = data[0].generated_text;
+        } else {
+            console.error('Unexpected response format from Hugging Face:', data); // Log unexpected format
+        }
+
         res.json({ message: generatedMessage });
     } catch (error) {
         console.error('Error during message generation:', error);

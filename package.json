@@ -2,16 +2,16 @@
     "name": "contact-your-representative",
     "version": "1.0.0",
     "description": "A Node.js server to generate advocacy messages for contacting representatives.",
-    "main": "index.js",
+    "main": "index.mjs",
     "scripts": {
-      "start": "node index.js"
+      "start": "node index.mjs"
     },
     "dependencies": {
       "express": "^4.17.1",
       "node-fetch": "^3.0.0",
       "cors": "^2.8.5"
     },
-    "author": "Your Name",
+    "author": "Matt",
     "license": "MIT"
   }
   

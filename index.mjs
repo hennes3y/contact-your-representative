@@ -11,16 +11,16 @@ app.use(cors());  // Enable CORS for all origins
 
 // Route to handle message generation
 app.post('/generate-message', async (req, res) => {
+    console.log('Request Body:', req.body); // Log the incoming request body
     const { name, topic, level } = req.body;
 
     try {
         // Construct the prompt
         const prompt = `Write a letter to a government official at the ${level} level. The topic of advocacy is ${topic}. This letter is on behalf of ${name}, who is a constituent and deeply cares about this issue. The letter should be persuasive, respectful, and highlight the urgency of the issue.`;
 
-        // Log the prompt for debugging
-        console.log('Prompt:', prompt);
+        console.log('Generated Prompt:', prompt); // Log the generated prompt
 
-        // Hugging Face API call
+        // Hugging Face API call with your access token and chosen model
         const response = await fetch('https://api-inference.huggingface.co/models/openai-community/gpt2', {
             method: 'POST',
             headers: {
@@ -31,13 +31,10 @@ app.post('/generate-message', async (req, res) => {
         });
 
         const data = await response.json();
-
-        // Log the entire response from Hugging Face
-        console.log('Response from Hugging Face:', data);
+        console.log('Response from Hugging Face:', data); // Log the response from Hugging Face
 
         if (data.error) {
-            // Log the error received from Hugging Face
-            console.error('Error from Hugging Face:', data.error);
+            console.error('Error from Hugging Face:', data.error); // Log the error if there is one
             return res.status(500).json({ error: data.error });
         }
 

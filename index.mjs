@@ -28,7 +28,7 @@ Keep the tone formal, respectful, and focused. Avoid extraneous details or unrel
                 'Authorization': `Bearer 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`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ inputs: prompt, parameters: { temperature: 0.7, max_new_tokens: 150 } })
+            body: JSON.stringify({ inputs: prompt, parameters: { temperature: 0.55, max_new_tokens: 200 } })
         });        
                 
         // Check if response is OK before parsing JSON

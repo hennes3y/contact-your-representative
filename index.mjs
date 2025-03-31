@@ -13,7 +13,13 @@ app.use(cors());  // Enable CORS for all origins
 app.post('/generate-message', async (req, res) => {
     console.log('Updated /generate-message route is running.');
     const { name, topic, level } = req.body;
-    const prompt = `Write a letter to a government official at the ${level} level. The topic of advocacy is ${topic}. This letter is on behalf of ${name}, who is a constituent and deeply cares about this issue. The letter should be persuasive, respectful, and highlight the urgency of the issue.`;
+    const prompt = `Compose a formal, concise, and persuasive letter addressed to a government official at the ${level} level regarding ${topic}. This letter is written on behalf of ${name}, a concerned constituent who cares deeply about this issue. The letter should include:
+- A brief introduction of ${name} and their connection to the community.
+- A clear explanation of the problem related to ${topic}, including key facts or impacts.
+- A respectful but urgent call-to-action, asking the official to take specific measures.
+- A closing that reaffirms the urgency of the matter and expresses gratitude for the official's consideration.
+Keep the tone formal, respectful, and focused. Avoid extraneous details or unrelated commentary. The final letter should be clear, direct, and no longer than 250 words.`;
+
     console.log('Constructed prompt:', prompt);
     try {
         const response = await fetch('https://api-inference.huggingface.co/models/EleutherAI/gpt-neo-125M', {
